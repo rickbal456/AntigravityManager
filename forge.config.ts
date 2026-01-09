@@ -45,6 +45,20 @@ const config: ForgeConfig = {
       for (const moduleName of nativeModules) {
         copyModuleRecursive(moduleName);
       }
+
+      // Copy assets to resources folder
+      const assetsSrc = path.join(process.cwd(), 'src', 'assets');
+      const assetsDest = path.join(buildPath, 'resources', 'assets');
+
+      if (fs.existsSync(assetsSrc)) {
+        if (!fs.existsSync(assetsDest)) {
+          fs.mkdirSync(assetsDest, { recursive: true });
+        }
+        fs.cpSync(assetsSrc, assetsDest, { recursive: true });
+        console.log(`Copied assets from ${assetsSrc} to ${assetsDest}`);
+      } else {
+        console.warn(`Assets directory not found: ${assetsSrc}`);
+      }
     },
   },
   makers: [new MakerSquirrel({}), new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})],
