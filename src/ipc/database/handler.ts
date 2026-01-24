@@ -15,6 +15,25 @@ function getDbWithWal(dbPath: string, options: Database.Options = {}): Database.
 }
 
 /**
+ * Initializes the database and ensures WAL mode is enabled.
+ * Should be called on application startup.
+ */
+export function initDatabase(): void {
+  try {
+    const dbPaths = getAntigravityDbPaths();
+    if (dbPaths.length === 0) {
+      return;
+    }
+
+    const db = getDatabaseConnection();
+    db.close();
+    logger.info('Database initialized and verified (WAL mode)');
+  } catch (error) {
+    logger.error('Failed to initialize database on startup', error);
+  }
+}
+
+/**
  * Ensures that the database file exists.
  * @param dbPath {string} The path to the database file.
  * @returns {void}

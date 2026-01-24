@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, Menu, nativeImage } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import fs from 'fs';
 
@@ -9,6 +9,7 @@ import { IPC_CHANNELS } from './constants';
 import { updateElectronApp, UpdateSourceType } from 'update-electron-app';
 import { logger } from './utils/logger';
 import { CloudAccountRepo } from './ipc/database/cloudHandler';
+import { initDatabase } from './ipc/database/handler';
 import { CloudMonitorService } from './services/CloudMonitorService';
 
 // Static Imports to fix Bundle Resolution Errors
@@ -232,6 +233,9 @@ app
       // We might want to exit here or show a dialog, but for now we proceed
       // though functionality will be broken.
     }
+
+    logger.info('Step: Initialize Antigravity DB (WAL Mode)');
+    initDatabase();
   })
   .then(() => {
     logger.info('Step: setupORPC');
