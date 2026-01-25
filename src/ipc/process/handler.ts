@@ -56,8 +56,8 @@ function isPgrepNoMatchError(error: unknown): boolean {
     return false;
   }
 
-  const message = error.message;
-  const hasPgrep = message.includes('pgrep -xi Antigravity');
+  const message = error.message.toLowerCase();
+  const hasPgrep = message.includes('pgrep') && message.includes('antigravity');
   const code = (error as { code?: number }).code;
   return hasPgrep && code === 1;
 }
@@ -74,18 +74,35 @@ export async function isProcessRunning(): Promise<boolean> {
 
     // Use find-process to search for Antigravity processes
     // 'name' search type matches process name
-    let processes: ProcessInfo[] = [];
-    try {
-      processes = await findProcess('name', 'Antigravity', true);
-    } catch (error) {
-      if (isPgrepNoMatchError(error)) {
-        logger.debug('No Antigravity process found (pgrep returned 1)');
-        return false;
+    const processMap = new Map<number, ProcessInfo>();
+    const searchNames = ['Antigravity', 'antigravity'];
+    let sawNoMatch = false;
+
+    for (const searchName of searchNames) {
+      try {
+        const matches = await findProcess('name', searchName, true);
+        for (const proc of matches) {
+          if (typeof proc.pid === 'number') {
+            processMap.set(proc.pid, proc);
+          }
+        }
+      } catch (error) {
+        if (isPgrepNoMatchError(error)) {
+          sawNoMatch = true;
+          continue;
+        }
+        throw error;
       }
-      throw error;
     }
 
-    logger.debug(`Found ${processes.length} processes matching 'Antigravity'`);
+    const processes = Array.from(processMap.values());
+    if (processes.length === 0 && sawNoMatch) {
+      logger.debug('No Antigravity process found (pgrep returned 1)');
+    }
+
+    logger.debug(
+      `Found ${processes.length} processes matching 'Antigravity/antigravity'`,
+    );
 
     for (const proc of processes) {
       // Skip self
