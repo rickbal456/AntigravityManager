@@ -2,6 +2,24 @@
 
 # Changelog
 
+## [0.7.0](https://github.com/Draculabo/AntigravityManager/compare/v0.6.0...v0.7.0) (2026-02-06)
+
+### ✨ Features
+
+* add multi-arch release artifacts and MSI packaging ([#65](https://github.com/Draculabo/AntigravityManager/issues/65)) ([f572ae4](https://github.com/Draculabo/AntigravityManager/commit/f572ae4652937efb25ab66defcfa55ddf65ac484))
+
+### 🐛 Bug Fixes
+
+* restore account switching on Antigravity 1.16.5 and migrate db sync to drizzle ([#69](https://github.com/Draculabo/AntigravityManager/issues/69)) ([ed94abf](https://github.com/Draculabo/AntigravityManager/commit/ed94abf0d6e90c0a1bf9c76f1ec3fdea091f6c4b))
+
+### 📝 Documentation
+
+* translate repository documentation to English ([#72](https://github.com/Draculabo/AntigravityManager/issues/72)) ([18389b9](https://github.com/Draculabo/AntigravityManager/commit/18389b975392f63441ede8369f13f6ef068214ab))
+
+### ♻️ Code Refactoring
+
+* migrate to winston and enable daily rotated app logs ([#71](https://github.com/Draculabo/AntigravityManager/issues/71)) ([2ae2216](https://github.com/Draculabo/AntigravityManager/commit/2ae2216f1ed3fa503ffd87a14cafd3921077a5c4))
+
 ## [0.6.0](https://github.com/Draculabo/AntigravityManager/compare/v0.5.0...v0.6.0) (2026-02-04)
 
 ### ✨ Features
